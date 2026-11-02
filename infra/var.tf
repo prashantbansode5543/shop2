@@ -70,7 +70,7 @@ variable "node_max_size" {
 variable "github_owner" {
   description = "GitHub user or organization that owns the Actions repository."
   type        = string
-  default     = "ExlearnTechnology"
+  default     = "prashantbansode5543"
 
   validation {
     condition     = length(trimspace(var.github_owner)) > 0

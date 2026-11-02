@@ -32,7 +32,7 @@ protected remote backend before applying.
 - A public IPv4 address from which you will run Terraform
 - An EC2 key pair in the configured AWS region if you intend to SSH to the
   bastion (the current instance configuration does not attach a key pair)
-- GitHub Actions enabled for `ExlearnTechnology/shop2`
+- GitHub Actions enabled for `prashantbansode5543/shop2`
 
 The EKS public API endpoint defaults to `0.0.0.0/0`, which allows connection
 attempts from every IPv4 address on the internet. This is intentionally
@@ -119,19 +119,17 @@ Terraform destroy provisioner before the cluster is deleted.
 
 ## Configure GitHub Actions and deploy
 
-After a successful apply, add repository Actions secrets named
-`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` in
-**Settings > Secrets and variables > Actions > Secrets**. Use keys for an IAM
-principal with permission to push to the five ECR repositories, describe the
-EKS cluster, and access the EKS Kubernetes API.
+The deployment workflow authenticates to AWS using GitHub OIDC; do not add
+long-lived AWS access keys to GitHub secrets. Confirm that the role ARN in
+`.github/workflows/deploy.yml` matches the Terraform output
+`github_actions_ecr_role_arn`. Its IAM trust policy must allow the OIDC
+audience `sts.amazonaws.com` and subject
+`repo:prashantbansode5543/shop2:ref:refs/heads/main`. If the trust policy in
+AWS is stale, review the Terraform plan and apply the updated role policy
+before rerunning the workflow.
 
-The workflow uses these credentials directly; it does not use the
-`AWS_ROLE_ARN` variable or GitHub OIDC. The IAM principal for the access keys
-must also be authorized in EKS to get and patch the `retail-store` Argo CD
-Application in the `argocd` namespace. The Terraform-created EKS access entry
-currently authorizes its GitHub Actions role, not an IAM user whose keys you
-provide. Add the IAM user principal to EKS access and bind the
-`github-actions-argocd-sync` Kubernetes group before running the workflow.
+The Terraform-created EKS access entry authorizes the GitHub Actions role to
+get and patch the `retail-store` Argo CD Application in the `argocd` namespace.
 The workflow enables auto-sync only after the images are pushed and the
 image-tag commit is made. It then waits for Synced/Healthy status. Auto-sync
 remains enabled for subsequent GitOps updates. `AWS_REGION` and
