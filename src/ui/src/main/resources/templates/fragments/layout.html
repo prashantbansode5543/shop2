@@ -20,6 +20,8 @@
               id="menu-home"
               th:href="@{/}"
               class="hover:text-primary-500 transition duration-300 text-sm"
+              th:classappend="${menu == 'home'} ? ' text-primary-500 font-semibold' : ''"
+              th:attr="aria-current=${menu == 'home'} ? 'page' : null"
               th:text="#{nav.home}"
               >Home</a
             >
@@ -27,24 +29,28 @@
               id="menu-catalog"
               th:href="@{/catalog}"
               class="hover:text-primary-500 transition duration-300 text-sm"
+              th:classappend="${menu == 'catalog'} ? ' text-primary-500 font-semibold' : ''"
+              th:attr="aria-current=${menu == 'catalog'} ? 'page' : null"
               th:text="#{nav.catalog}"
               >Catalog</a
             >
           </div>
-          <!-- Cart Button with Count -->
+          <!-- Cart link with count -->
           <div class="flex items-center">
-            <a th:href="@{/cart}" id="go-cart">
-              <button
-                class="flex items-center gap-2 p-2 text-gray-700 hover:text-primary-500"
+            <a
+              th:href="@{/cart}"
+              id="go-cart"
+              class="flex items-center gap-2 p-2 text-gray-700 hover:text-primary-500"
+              th:attr="aria-label=|Shopping cart, ${cart.numItems} items|"
+            >
+              <i class="fas fa-shopping-cart text-lg" aria-hidden="true"></i>
+              <span
+                class="bg-primary-500 text-white text-xs rounded-full h-5 min-w-[1.25rem] flex items-center justify-center switch-other"
+                th:text="${cart.numItems}"
+                aria-hidden="true"
               >
-                <i class="fas fa-shopping-cart text-lg"></i>
-                <span
-                  class="bg-primary-500 text-white text-xs rounded-full h-5 min-w-[1.25rem] flex items-center justify-center switch-other"
-                  th:text="${cart.numItems}"
-                >
-                  3
-                </span>
-              </button>
+                3
+              </span>
             </a>
           </div>
         </div>

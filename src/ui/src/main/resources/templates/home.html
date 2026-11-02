@@ -22,6 +22,7 @@
                 id="menu-home"
                 th:href="@{/}"
                 class="text-white/90 hover:text-white transition duration-300 text-sm switch"
+                aria-current="page"
                 th:text="#{nav.home}"
                 >Home</a
               >
@@ -33,20 +34,25 @@
                 >Catalog</a
               >
             </div>
-            <!-- Cart Button with Count -->
+            <!-- Cart link with count -->
             <div class="flex items-center">
-              <a th:href="@{/cart}" id="go-cart">
-                <button
-                  class="flex items-center gap-2 p-2 text-white hover:text-white/80"
+              <a
+                th:href="@{/cart}"
+                id="go-cart"
+                class="flex items-center gap-2 p-2 text-white hover:text-white/80"
+                th:attr="aria-label=|Shopping cart, ${cart.numItems} items|"
+              >
+                <i
+                  class="fas fa-shopping-cart text-lg switch"
+                  aria-hidden="true"
+                ></i>
+                <span
+                  class="bg-white text-gray-700 text-xs rounded-full h-5 min-w-[1.25rem] flex items-center justify-center switch-other"
+                  th:text="${cart.numItems}"
+                  aria-hidden="true"
                 >
-                  <i class="fas fa-shopping-cart text-lg switch"></i>
-                  <span
-                    class="bg-white text-gray-700 text-xs rounded-full h-5 min-w-[1.25rem] flex items-center justify-center switch-other"
-                    th:text="${cart.numItems}"
-                  >
-                    3
-                  </span>
-                </button>
+                  3
+                </span>
               </a>
             </div>
           </div>
